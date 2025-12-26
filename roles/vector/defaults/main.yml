@@ -1,0 +1,29 @@
+#SPDX-License-Identifier: MIT-0
+---
+# Role defaults for Vector
+vector_version: "0.22.1"
+vector_package_arch: "x86_64"
+vector_rpm_name: "vector-{{ vector_version }}-1.{{ vector_package_arch }}.rpm"
+vector_download_url: "https://packages.timber.io/vector/{{ vector_version }}/{{ vector_rpm_name }}"
+vector_package_dest: "/tmp/{{ vector_rpm_name }}"
+
+vector_config_dir: "/etc/vector"
+vector_config_owner: "{{ ansible_user_id }}"
+vector_config_group: "{{ ansible_user_gid }}"
+
+vector_config:
+  sources:
+    demo_logs:
+      type: demo_logs
+      format: syslog
+  sinks:
+    to_clickhouse:
+      type: clickhouse
+      inputs:
+        - demo_logs
+      database: logs
+      endpoint: http://localhost:8123
+      table: vector_table
+      compression: gzip
+      healthcheck: true
+      skip_unknown_fields: true

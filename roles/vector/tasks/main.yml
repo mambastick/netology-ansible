@@ -1,0 +1,54 @@
+#SPDX-License-Identifier: MIT-0
+---
+- name: Vector | Download package
+  ansible.builtin.get_url:
+    url: "{{ vector_download_url }}"
+    dest: "{{ vector_package_dest }}"
+    mode: "0644"
+
+- name: Vector | Install package
+  become: true
+  ansible.builtin.yum:
+    name: "{{ vector_package_dest }}"
+    state: present
+    disable_gpg_check: true
+
+- name: Vector | Ensure config directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ vector_config_dir }}"
+    state: directory
+    owner: "{{ vector_config_owner }}"
+    group: "{{ vector_config_group }}"
+    mode: "0755"
+
+- name: Vector | Deploy configuration
+  become: true
+  ansible.builtin.template:
+    src: vector.yml.j2
+    dest: "{{ vector_config_path }}"
+    owner: "{{ vector_config_owner }}"
+    group: "{{ vector_config_group }}"
+    mode: "0644"
+    validate: "{{ vector_validate_command }}"
+  notify: Restart vector
+
+- name: Vector | Install systemd unit
+  become: true
+  ansible.builtin.template:
+    src: vector.service.j2
+    dest: "{{ vector_systemd_unit }}"
+    owner: "{{ vector_config_owner }}"
+    group: "{{ vector_config_group }}"
+    mode: "0644"
+    backup: true
+  notify:
+    - Reload systemd
+    - Restart vector
+
+- name: Vector | Ensure service enabled
+  become: true
+  ansible.builtin.service:
+    name: "{{ vector_service_name }}"
+    state: started
+    enabled: true

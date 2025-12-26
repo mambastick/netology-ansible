@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# Variables that are unlikely to change between environments
+vector_service_name: vector
+vector_systemd_unit: /usr/lib/systemd/system/vector.service
+vector_config_path: "{{ vector_config_dir }}/vector.yml"
+vector_validate_command: "vector validate --no-environment --config-yaml %s"

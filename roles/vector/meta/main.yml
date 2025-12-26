@@ -1,0 +1,13 @@
+#SPDX-License-Identifier: MIT-0
+galaxy_info:
+  author: golodniy
+  description: Install and configure Vector
+  company: ""
+  license: MIT
+  min_ansible_version: "2.9"
+  galaxy_tags:
+    - vector
+    - logging
+    - clickhouse
+
+dependencies: []
