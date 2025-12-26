@@ -28,6 +28,7 @@ ansible-galaxy install -r requirements.yml -p roles
 - `clickhouse_packages` — список rpm.
 - `clickhouse_dbs_custom` — создаваемые БД (по умолчанию `logs`).
 - `clickhouse_listen_host` — список listen_host (по умолчанию `::`).
+- `clickhouse_repo_key` — GPG‑ключ репозитория.
 
 `group_vars/vector.yml`
 - `vector_version` — версия Vector.
@@ -39,7 +40,7 @@ ansible-galaxy install -r requirements.yml -p roles
 `roles/lighthouse/defaults/main.yml`
 - `lighthouse_root` — куда клонируется UI.
 - `lighthouse_listen_port` — порт nginx (80).
-- `lighthouse_clickhouse_host`/`lighthouse_clickhouse_port` — адрес ClickHouse для UI; nginx проксирует `/clickhouse/` на этот endpoint, чтобы избежать CORS.
+- `lighthouse_clickhouse_host`/`lighthouse_clickhouse_port` — адрес ClickHouse для UI.
 
 Подробнее см. `roles/vector/README.md` и `roles/lighthouse/README.md`.
 
@@ -48,7 +49,7 @@ ansible-galaxy install -r requirements.yml -p roles
 `site.yml` запускает три play:
 - `clickhouse` — устанавливает ClickHouse из внешней роли, создаёт БД `logs`.
 - `vector` — скачивает и ставит rpm, рендерит конфиг и unit, запускает сервис.
-- `lighthouse` — ставит nginx, клонирует VK LightHouse, настраивает vhost и прокси `/clickhouse/`.
+- `lighthouse` — ставит nginx, клонирует VK LightHouse и публикует UI на указанном порту.
 
 ## Быстрый старт
 
@@ -61,12 +62,12 @@ ansible-galaxy install -r requirements.yml -p roles
 4. После деплоя:
    - `curl http://<clickhouse-host>:8123/` → должно вернуть `Ok.`.
    - В браузере откройте `http://<lighthouse-host>/` (порт 80).  
-     В настройках LightHouse используйте endpoint `http://<lighthouse-host>/clickhouse` — запросы пойдут через nginx на ClickHouse.
+     В настройках LightHouse укажите endpoint ClickHouse напрямую, например `http://<clickhouse-host>:8123`.
 
 ## Полезные проверки
 
 - Статус сервисов: `systemctl status clickhouse-server`, `systemctl status vector`, `systemctl status nginx`.
-- Доступность прокси: `curl -i http://<lighthouse-host>/clickhouse/` → `Ok.`.
+- Доступность ClickHouse: `curl -i http://<clickhouse-host>:8123/` → `Ok.`.
 - Логи:
   - ClickHouse: `/var/log/clickhouse-server/clickhouse-server.log`
   - Vector: `/var/log/vector/vector.log` (если включён)
