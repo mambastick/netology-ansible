@@ -1,0 +1,20 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: rockylinux_9
+    image: rockylinux-python:9 
+    pre_build_image: true
+  - name: fedora_latest
+    image: pycontribs/fedora:latest
+    pre_build_image: true
+  - name: ubuntu_latest
+    image: ubuntu-python:latest
+    pre_build_image: true
+provisioner:
+  name: ansible
+
+verifier:
+  name: ansible

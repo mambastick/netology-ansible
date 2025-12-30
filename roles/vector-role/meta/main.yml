@@ -1,0 +1,21 @@
+galaxy_info:
+  author: Semen Aleksandrov
+  role_name: vector_role
+  galaxy_name: vector
+  namespace: aleksandrov
+  description: This role install lighthouse and nginx on Centos
+  company: your company (optional)
+
+  license: MIT
+
+  min_ansible_version: "2.10"
+ 
+  platforms:
+  - name: CentOS
+    versions:
+    - "8"
+    - "9"
+
+  galaxy_tags: []
+
+dependencies: []

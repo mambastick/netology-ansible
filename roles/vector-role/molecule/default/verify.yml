@@ -1,0 +1,31 @@
+- name: Verify
+  hosts: all
+  gather_facts: true
+  vars:
+    vector_config_path: /etc/vector/vector.yaml
+  tasks:
+
+    - name: Get Vector process PID
+      shell: |
+        pidof vector || pgrep vector || echo "0"
+      register: vector_pid
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Check vector service
+      assert:
+        that: vector_pid.stdout != 0
+        success_msg: "Service is running"
+        fail_msg: "Service not running FAIL"
+
+    - name: Validate Vector config and register result
+      command: vector validate --config-yaml "{{ vector_config_path }}"
+      register: config_validation
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Check vector config validation result
+      assert:
+        that: config_validation.rc == 0
+        success_msg: "Vector configuration is valid"
+        fail_msg: "Vector configuration is invalid. Error: {{ config_validation.stderr }}"

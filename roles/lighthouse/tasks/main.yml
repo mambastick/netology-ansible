@@ -1,3 +1,0 @@
----
-# tasks file for lighthouse-role
-- include_tasks: clone_repository.yml

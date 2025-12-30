@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: "Include vector-role"
+      include_role:
+        name: "vector-role"  #/home/aleksandrov_sp/netology/other/dz_04_ansible/vector-role #

@@ -1,0 +1,23 @@
+---
+version: '3.1'
+
+services:
+  aragast:
+    image: aragast/netology:latest
+    build: .
+    container_name: aragast
+    privileged: true
+    working_dir: /opt/vector-role
+    volumes:
+      - ./:/opt/vector-role
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+
+    tmpfs:
+      - /run
+      - /tmp
+    command: |
+        /sbin/init
+        docker run -v /var/run/docker.sock:/var/run/docker.sock

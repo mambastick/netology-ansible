@@ -84,22 +84,6 @@
   become: true
   when: clickhouse_zookeeper_nodes is defined
 
-- name: Config | Remove default http_port from base config
-  lineinfile:
-    path: "{{ clickhouse_path_configdir }}/config.xml"
-    search_string: '<http_port>'
-    state: absent
-  become: true
-  notify: restart-ch
-
-- name: Config | Remove default tcp_port from base config
-  lineinfile:
-    path: "{{ clickhouse_path_configdir }}/config.xml"
-    search_string: '<tcp_port>'
-    state: absent
-  become: true
-  notify: restart-ch
-
 - name: Config | Fix interserver_http_port and intersever_https_port collision
   lineinfile:
     path: "{{ clickhouse_path_configdir }}/config.xml"
