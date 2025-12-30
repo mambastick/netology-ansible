@@ -1,4 +1,0 @@
----
-lighthouse_repo: "https://github.com/VKCOM/lighthouse.git"
-lighthous_local_dir: "/usr/share/nginx/html/lighthouse"
-ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
